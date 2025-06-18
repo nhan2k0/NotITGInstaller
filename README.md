@@ -13,7 +13,7 @@ Structure of the installation folder based from `Quickstart-v.4.9.1.zip`
 This NSIS script compile binary in `output` folder
 <br>Setup Process:
 
-- Download game file from NotITG website using `NSCurl`
+- Download game file from NotITG website using `inetc`
 - Extract the game files using `NSISUnz`
 
 Optional Feature:
@@ -30,21 +30,23 @@ Optional Feature:
 
 # Requirement
 
-1. NSIS 3.11 (older NSIS should be fine)
+1. NSIS 3.11
 2. inetc
 3. NSISUnz
+4. advsplash (Splash screen)
 
 # Credits / Assets
 
 - Mirin Template (v5.0.2) by XeroOI
 - Wizard Image - Altate by PlasticRainbow + mrcool909090 from Mod Jam Easy Modo
 - Icon modified from OpenITG icon
-- Splash Logo, Header, Licenses from NotITG
 
 # False Positive
 
 NSIS have common problem with false positive antivirus, please refer to [this](https://nsis.sourceforge.io/NSIS_False_Positives) for more information
-<br>Because the using online feature ``NSCurl`` to download the game file from the website, Some antivirus will detect this as malcious activity
+
+If the installer show SmartScreen when open the program, simply click "More info" and then "Run anyway"
+<br>Because the installation using online feature to download the game file from the website, some antivirus will detect this as malcious activity, if Windows falsely remove the installer, you have to go to Windows Defender and allow the program
 <br>The code in this repository is harmless and the gamedata taken from NotITG [website](https://noti.tg), you can review the code in case there's something wrong with the code *(Please apologize if there's something wrong with the code :( )*
 
 # Final Note
