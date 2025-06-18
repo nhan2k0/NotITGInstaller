@@ -8,7 +8,7 @@
 
 ;DEFINE INSTALLER INFORMATION
 Name "${PRODUCT_ID} ${PRODUCT_VER}"
-OutFile "output/${PRODUCT_ID}${PRODUCT_VER}_06152025_OnlineInstaller.exe"
+OutFile "output/${PRODUCT_ID}${PRODUCT_VER}_TEST.exe"
 ;BrandingText "Unofficial installer by dkbhx"
 Unicode "True"
 InstallDir "E:\Games\NotITG"
@@ -49,9 +49,9 @@ EnableWindow $0 1
   StrCpy $0 "$TEMP\${PRODUCT_ID}-${PRODUCT_VER}-Quickstart.zip"
 
   IfFileExists "$0" existFile
-  DetailPrint "Download Game"
-  NScurl::http GET "https://cloud.noti.tg/QuickStart-${PRODUCT_VER}.zip" $0 /RESUME /END
-  ;NScurl::http GET "http://localhost:8000/NotITG-v.4.9.1-Quickstart.zip" $0 /RESUME /END
+  ;DetailPrint "Download Game"
+  ;NScurl::http GET "https://cloud.noti.tg/QuickStart-${PRODUCT_VER}.zip" $0 /RESUME /END
+  inetc::get /caption "Download Game" "https://cloud.noti.tg/QuickStart-${PRODUCT_VER}.zip" "$0"
   Pop $1
   DetailPrint "Download Game: $1"
   StrCmp $1 "OK" download_ok download_notok

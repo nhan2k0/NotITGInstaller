@@ -26,12 +26,12 @@ Optional Feature:
 
 - Unlike online installer, the game data is packed into the installer
 - User can pick whenever they want to keep or not keep the Song Pack or individual Song Pack
-- Standalone required you to already have zip
+- Standalone required you to already have zip file
 
 # Requirement
 
 1. NSIS 3.11 (older NSIS should be fine)
-2. NSCurl
+2. inetc
 3. NSISUnz
 
 # Credits / Assets
@@ -44,11 +44,9 @@ Optional Feature:
 # False Positive
 
 NSIS have common problem with false positive antivirus, please refer to [this](https://nsis.sourceforge.io/NSIS_False_Positives) for more information
-<br>Because the using online feature to download the game file from the website, Some antivirus will detect this as malcious activity
+<br>Because the using online feature ``NSCurl`` to download the game file from the website, Some antivirus will detect this as malcious activity
 <br>The code in this repository is harmless and the gamedata taken from NotITG [website](https://noti.tg), you can review the code in case there's something wrong with the code *(Please apologize if there's something wrong with the code :( )*
 
 # Final Note
 
 This is the small project and will not replace the way people install NotiTG normally, and it's not endorsed by NotITG Team
-
-The installer purpose is to anyone who looking the reliable way, easy way or people who prefer "Installer" way
