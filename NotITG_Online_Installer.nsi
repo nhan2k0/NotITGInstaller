@@ -114,7 +114,7 @@ SetOutPath $INSTDIR
   
 SectionEnd
   
-Section "Shortcut" ShortcutGame
+Section "Game Shortcut" ShortcutGame
 Sleep 500
 DetailPrint "Creating Shortcut"
 CreateShortCut "$DESKTOP\${PRODUCT_ID} ${PRODUCT_VER} - Folder.lnk" "$INSTDIR\"
@@ -154,9 +154,9 @@ Function .onInit
 			;skin (uncomment this if you want to implement this)
 			/*
 			SetOutPath $TEMP
-            File /oname=skin.skf "fish.skf"
-            NSIS_SkinCrafter_Plugin::skin /NOUNLOAD $TEMP\skin.skf
-            Delete $TEMP\skin.skf
+      File /oname=skin.skf "fish.skf"
+      NSIS_SkinCrafter_Plugin::skin /NOUNLOAD $TEMP\skin.skf
+      Delete $TEMP\skin.skf
 			*/
 			
 			;splash
