@@ -1,17 +1,27 @@
 ;include NSIS plugins
 !include "MUI2.nsh"
+!include "nsDialogs.nsh"
+;git commit id 
+!tempfile CommitIDParse
+!echo "$CommitIDParse"
+!system '"git" rev-parse --short HEAD > "${CommitIDParse}'
+!searchparse /file "${CommitIDParse}" "" CommitID
+;git date
+!tempfile CommitDateParse
+!echo "$CommitDateParse"
+!system '"git" log -1 --date=format:"%m%d%Y" --format=%cd > "${CommitDateParse}'
+!searchparse /file "${CommitDateParse}" "" CommitDate
 ;DEFINE GAME INFORMATION
 !define PRODUCT_ID "NotITG"
 !define PRODUCT_NAME "NotITG"
 !define PRODUCT_VER "v4.9.1"
 !define PRODUCT_DISPLAY "${PRODUCT_ID} ${PRODUCT_VER}"
-
 ;DEFINE INSTALLER INFORMATION
 Name "${PRODUCT_ID} ${PRODUCT_VER}"
-OutFile "output/${PRODUCT_ID}${PRODUCT_VER}_TEST.exe"
-;BrandingText "Unofficial installer by dkbhx"
+OutFile "output/${PRODUCT_ID}${PRODUCT_VER}_${CommitID}_${CommitDate}.exe"
+BrandingText "Build ${CommitID}_${CommitDate}"
 Unicode "True"
-InstallDir "E:\Games\NotITG"
+InstallDir "C:\Games\NotITG"
 RequestExecutionLevel user
 ShowInstDetails show
 
@@ -22,6 +32,7 @@ ShowInstDetails show
 !define WELCOME_FINISH_IMAGE "assets\wizard2.bmp"
 !define MUI_WELCOMEFINISHPAGE_BITMAP "${WELCOME_FINISH_IMAGE}"
 !define MUI_ICON "assets\nitg_install.ico"
+!define NITGFileSize 577277 ;game size
 
 ;asset text stuff
 !define MUI_WELCOMEPAGE_TITLE "Welcome to ${PRODUCT_ID} ${PRODUCT_VER}"	
@@ -30,6 +41,7 @@ ShowInstDetails show
 ;page stuff
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "assets\Licenses.txt"
+;Page custom TestPage ; --later
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
@@ -38,12 +50,12 @@ ShowInstDetails show
 ;language
 !insertmacro MUI_LANGUAGE "English"
 
-
 Section "Full Game" Game
+AddSize ${NITGFileSize}
 SectionIn 1 RO
 SetOutPath $INSTDIR
-GetDlgItem $0 $HWNDPARENT 2
-EnableWindow $0 1
+;GetDlgItem $0 $HWNDPARENT 2
+;EnableWindow $0 1
   ; Target file path
   InitPluginsDir
   StrCpy $0 "$TEMP\${PRODUCT_ID}-${PRODUCT_VER}-Quickstart.zip"
@@ -67,7 +79,7 @@ EnableWindow $0 1
   
   extractfile:
   DetailPrint "Extract Game"
-  nsisunz::Unzip "$0" "$INSTDIR"
+  nsisunz::UnzipToLog "$0" "$INSTDIR"
   Pop $2
   DetailPrint "Extract Game: $2"
   StrCmp $2 "success" finalize extractfail
@@ -102,10 +114,15 @@ EnableWindow $0 1
   
 SectionEnd
   
-Section "Shortcut" FinalizeStep
+Section "Shortcut" ShortcutGame
 Sleep 500
-DetailPrint "Creating Shortcut and Removing Temp file"
-CreateShortCut "$DESKTOP\${PRODUCT_ID} ${PRODUCT_VER}.lnk" "$INSTDIR\Program\NotITG-v4.9.1.exe"
+DetailPrint "Creating Shortcut"
+CreateShortCut "$DESKTOP\${PRODUCT_ID} ${PRODUCT_VER} - Folder.lnk" "$INSTDIR\"
+SectionEnd
+
+Section "Folder Shortcut" ShortcutFolder
+Sleep 500
+DetailPrint "Creating Folder Shortcut"
 CreateShortCut "$DESKTOP\${PRODUCT_ID} ${PRODUCT_VER} - Folder.lnk" "$INSTDIR\"
 SectionEnd
 
@@ -129,7 +146,8 @@ SectionEnd
 !insertmacro MUI_DESCRIPTION_TEXT ${Game} "Setup will download the game data from NotITG website and extract it"
 !insertmacro MUI_DESCRIPTION_TEXT ${SongRemove} "All the songpack will be remove to keep the game in minimal space. Unchecked this if you don't need to (Specially if you are beginner)"
 !insertmacro MUI_DESCRIPTION_TEXT ${MirinTemplate} "Template use for NotITG Modfile. This will install in Song directory"
-!insertmacro MUI_DESCRIPTION_TEXT ${FinalizeStep} "Creating game shortcut + folder shortcut"
+!insertmacro MUI_DESCRIPTION_TEXT ${ShortcutGame} "Creating game shortcut"
+!insertmacro MUI_DESCRIPTION_TEXT ${ShortcutFolder} "Creating game folder shortcut"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Function .onInit

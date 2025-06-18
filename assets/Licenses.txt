@@ -1,5 +1,3 @@
-NotITG v4.2.0 2021
-
 The following license applies to most of the NotITG codebase:
 ******************************************************************************
 
