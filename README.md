@@ -34,6 +34,7 @@ Optional Feature:
 2. inetc
 3. NSISUnz
 4. advsplash (Splash screen)
+5. Git (commit id, date parsing)
 
 # Credits / Assets
 
