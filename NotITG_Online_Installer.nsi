@@ -18,8 +18,8 @@
 !define PRODUCT_DISPLAY "${PRODUCT_ID} ${PRODUCT_VER}"
 ;DEFINE INSTALLER INFORMATION
 Name "${PRODUCT_ID} ${PRODUCT_VER}"
-OutFile "output/${PRODUCT_ID}${PRODUCT_VER}_${CommitID}_${CommitDate}.exe"
-BrandingText "Build ${CommitID}_${CommitDate}"
+OutFile "output/${PRODUCT_ID}${PRODUCT_VER}_${CommitID}_${CommitDate}_OnlineInstaller.exe"
+BrandingText "Installer Build ${CommitID}_${CommitDate}"
 Unicode "True"
 InstallDir "C:\Games\NotITG"
 RequestExecutionLevel user
@@ -49,6 +49,9 @@ ShowInstDetails show
 
 ;language
 !insertmacro MUI_LANGUAGE "English"
+
+!delfile "${CommitIDParse}"
+!delfile "${CommitDateParse}"
 
 Section "Full Game" Game
 AddSize ${NITGFileSize}
