@@ -26,7 +26,7 @@ Optional Feature:
 
 - Unlike online installer, the game data is packed into the installer
 - User can pick whenever they want to keep or not keep the Song Pack or individual Song Pack
-- Standalone required you to already have zip file
+- Standalone required you to have game zipfile in order to repackage into the installer
 
 # Requirement
 
@@ -52,4 +52,4 @@ If the installer show SmartScreen when open the program, simply click "More info
 
 # Final Note
 
-This is the small project and will not replace the way people install NotiTG normally, and it's not endorsed by NotITG Team
+This is a small project and will not replace the way people install NotiTG normally, and it's not endorsed by NotITG Team
