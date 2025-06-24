@@ -18,7 +18,7 @@
 !define PRODUCT_DISPLAY "${PRODUCT_ID} ${PRODUCT_VER}"
 ;DEFINE INSTALLER INFORMATION
 Name "${PRODUCT_ID} ${PRODUCT_VER}"
-OutFile "output/${PRODUCT_ID}${PRODUCT_VER}_${CommitID}_${CommitDate}_OnlineInstaller.exe"
+OutFile "output/${PRODUCT_ID}${PRODUCT_VER}_${CommitID}_OnlineInstaller.exe"
 BrandingText "Installer Build ${CommitID}_${CommitDate}"
 Unicode "True"
 InstallDir "C:\Games\NotITG"
@@ -154,12 +154,12 @@ SectionEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Function .onInit
-			;skin (uncomment this if you want to implement this)
+			;skin (cosmetic - uncomment this if you want to implement this)
 			/*
 			SetOutPath $TEMP
-      File /oname=skin.skf "fish.skf"
-      NSIS_SkinCrafter_Plugin::skin /NOUNLOAD $TEMP\skin.skf
-      Delete $TEMP\skin.skf
+			File /oname=skin.skf "fish.skf"
+			NSIS_SkinCrafter_Plugin::skin /NOUNLOAD $TEMP\skin.skf
+			Delete $TEMP\skin.skf
 			*/
 			
 			;splash
