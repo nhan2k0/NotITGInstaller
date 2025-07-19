@@ -131,9 +131,8 @@ SectionEnd
 Section "Mirin Template v5.0.1" MirinTemplate
 SetOutPath $INSTDIR
 inetc::get /caption "Download Stuff" "https://github.com/XeroOl/mirin-template/releases/download/v5.0.1/mirin-template-5.0.1.zip" "$TEMP\mirin501.zip"
-CreateDirectory "$INSTDIR\Songs\MyModchart\Mirin Template"
-SetOutPath "$INSTDIR\Songs\MyModchart\Mirin Template"
-nsisunz::UnzipToLog "$TEMP\mirin501.zip" "$INSTDIR\Songs\Mirin Template"
+CreateDirectory "$INSTDIR\Songs\MyModchart"
+nsisunz::UnzipToLog "$TEMP\mirin501.zip" "$INSTDIR\Songs\MyModchart\Mirin Template"
 delete "$TEMP\mirin501.zip"
 SectionEnd
 
