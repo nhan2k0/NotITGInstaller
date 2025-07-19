@@ -19,7 +19,7 @@
 ;DEFINE INSTALLER INFORMATION
 Name "${PRODUCT_ID} ${PRODUCT_VER}"
 OutFile "output/${PRODUCT_ID}${PRODUCT_VER}_${CommitID}_OnlineInstaller.exe"
-BrandingText "Installer Build ${CommitID}_${CommitDate}"
+BrandingText "${CommitID}/${CommitDate}"
 Unicode "True"
 InstallDir "C:\Games\NotITG"
 RequestExecutionLevel user
@@ -32,10 +32,8 @@ ShowInstDetails show
 !define WELCOME_FINISH_IMAGE "assets\wizard2.bmp"
 !define MUI_WELCOMEFINISHPAGE_BITMAP "${WELCOME_FINISH_IMAGE}"
 !define MUI_ICON "assets\nitg_install.ico"
-!define NITGFileSize 577277 ;game size
-
 ;asset text stuff
-!define MUI_WELCOMEPAGE_TITLE "Welcome to ${PRODUCT_ID} ${PRODUCT_VER}"	
+!define MUI_WELCOMEPAGE_TITLE "${PRODUCT_ID} ${PRODUCT_VER} - Online Installer"	
 !define MUI_WELCOMEPAGE_TEXT "This installation required internet connection to download Game Files, make sure your connection is stable$\r$\nClick 'Next' to continue$\r$\n$\r$\nThe NotITG Project is managed by TaroNuke and HeySora$\r$\n$\r$\nThis installer is not endorsed by NotITG Team"
 
 ;page stuff
@@ -54,7 +52,7 @@ ShowInstDetails show
 !delfile "${CommitDateParse}"
 
 Section "Full Game" Game
-AddSize ${NITGFileSize}
+AddSize 634993
 SectionIn 1 RO
 SetOutPath $INSTDIR
 ;GetDlgItem $0 $HWNDPARENT 2
@@ -81,6 +79,7 @@ SetOutPath $INSTDIR
   goto extractfile
   
   extractfile:
+  Sleep 1000
   DetailPrint "Extract Game"
   nsisunz::UnzipToLog "$0" "$INSTDIR"
   Pop $2
@@ -129,51 +128,51 @@ DetailPrint "Creating Folder Shortcut"
 CreateShortCut "$DESKTOP\${PRODUCT_ID} ${PRODUCT_VER} - Folder.lnk" "$INSTDIR\"
 SectionEnd
 
-Section "Mirin Template v5.0.2" MirinTemplate
+Section "Mirin Template v5.0.1" MirinTemplate
 SetOutPath $INSTDIR
-
+inetc::get /caption "Download Stuff" "https://github.com/XeroOl/mirin-template/releases/download/v5.0.1/mirin-template-5.0.1.zip" "$TEMP\mirin501.zip"
 CreateDirectory "$INSTDIR\Songs\MyModchart\Mirin Template"
 SetOutPath "$INSTDIR\Songs\MyModchart\Mirin Template"
-File /r "assets\MirinTemplate\*"
+nsisunz::UnzipToLog "$TEMP\mirin501.zip" "$INSTDIR\Songs\Mirin Template"
+delete "$TEMP\mirin501.zip"
+SectionEnd
+
+Section "Pack - Mod Jam Easy Modo 2" MJEZ2
+AddSize 213875
+SetOutPath $INSTDIR
+
+StrCpy $0 "$TEMP\Mod Jam Easy Modo 2.zip"
+inetc::get /caption "Download" "https://www.dropbox.com/scl/fi/9sp63j42n7ghc551h3d02/Mod-Jam-Easy-Modo-2.zip?rlkey=3g0k1191hu4l3rdbxfl3yo5v9&dl=1" "$0"
+Pop $1
+DetailPrint "Download Pack: $1"
+nsisunz::UnzipToLog "$0" "$INSTDIR\Songs"
+delete "$TEMP\Mod Jam Easy Modo 2.zip"
 SectionEnd
 
 Section /o "Song Removal" SongRemove
 SetOutPath $INSTDIR
+AddSize -488180
 RMDir /r "$INSTDIR\Songs\Mod Jam Easy Modo"
 RMDir /r "$INSTDIR\Songs\Mods Boot Camp"
 RMDir /r "$INSTDIR\Songs\OISRT - Day 1"
 SectionEnd
+
+
 
 ;section description
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
 !insertmacro MUI_DESCRIPTION_TEXT ${Game} "Setup will download the game data from NotITG website and extract it"
 !insertmacro MUI_DESCRIPTION_TEXT ${SongRemove} "All the songpack will be remove to keep the game in minimal space. Unchecked this if you don't need to (Specially if you are beginner)"
 !insertmacro MUI_DESCRIPTION_TEXT ${MirinTemplate} "Template use for NotITG Modfile. This will install in Song directory"
+!insertmacro MUI_DESCRIPTION_TEXT ${MJEZ2} "Sequel of Mod Jam Easy Modo which targeted to beginner. This will install in Song directory"
 !insertmacro MUI_DESCRIPTION_TEXT ${ShortcutGame} "Creating game shortcut"
 !insertmacro MUI_DESCRIPTION_TEXT ${ShortcutFolder} "Creating game folder shortcut"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Function .onInit
-			;skin (cosmetic - uncomment this if you want to implement this)
-			/*
-			SetOutPath $TEMP
-			File /oname=skin.skf "fish.skf"
-			NSIS_SkinCrafter_Plugin::skin /NOUNLOAD $TEMP\skin.skf
-			Delete $TEMP\skin.skf
-			*/
-			
 			;splash
 			InitPluginsDir
 			File /oname=$PLUGINSDIR\splash.bmp "assets\nitglogo.bmp"
 			advsplash::show 300 200 400 0x04025C $PLUGINSDIR\splash
 			Delete "$PLUGINSDIR\splash.bmp"
-			
-			;music bg (uncomment this if you want to implement this)
-			;ffmpeg -i input.mp3 output.wav
-			/*
-			File /ONAME=$PLUGINSDIR\sound.wav "${WAV_FILE}"
-			StrCpy $0 "$PLUGINSDIR\sound.wav"  ; location of the wav file
-			IntOp $1 "SND_ASYNC" || 1
-			System::Call 'winmm::PlaySound(t r0, i 0, i 131081) b'
-			*/
 FunctionEnd
