@@ -49,7 +49,3 @@ NSIS have common problem with false positive antivirus, please refer to [this](h
 If the installer show SmartScreen when open the program, simply click "More info" and then "Run anyway"
 <br>Because the installation using online feature to download the game file from the website, some antivirus will detect this as malcious activity, if Windows falsely remove the installer, you have to go to Windows Defender and allow the program
 <br>The code in this repository is harmless and the gamedata taken from NotITG [website](https://noti.tg), you can review the code in case there's something wrong with the code *(Please apologize if there's something wrong with the code :( )*
-
-# Final Note
-
-This is a small project and will not replace the way people install NotiTG normally, and it's not endorsed by NotITG Team
