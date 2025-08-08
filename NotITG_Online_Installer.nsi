@@ -39,7 +39,6 @@ ShowInstDetails show
 ;page stuff
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "assets\Licenses.txt"
-;Page custom TestPage ; --later
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
@@ -130,7 +129,7 @@ SectionEnd
 
 Section "Mirin Template v5.0.1" MirinTemplate
 SetOutPath $INSTDIR
-inetc::get /caption "Download Stuff" "https://github.com/XeroOl/mirin-template/releases/download/v5.0.1/mirin-template-5.0.1.zip" "$TEMP\mirin501.zip"
+inetc::get /caption "Download Mirin Template" "https://github.com/XeroOl/mirin-template/releases/download/v5.0.1/mirin-template-5.0.1.zip" "$TEMP\mirin501.zip"
 CreateDirectory "$INSTDIR\Songs\MyModchart"
 nsisunz::UnzipToLog "$TEMP\mirin501.zip" "$INSTDIR\Songs\MyModchart\Mirin Template"
 delete "$TEMP\mirin501.zip"
