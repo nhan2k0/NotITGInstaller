@@ -33,7 +33,7 @@ Optional Feature:
 1. NSIS 3.11
 2. inetc
 3. NSISUnz
-4. advsplash (Splash screen)
+4. newadvsplash (Splash screen)
 5. Git (commit id, date parsing)
 
 # Credits / Assets

@@ -19,7 +19,7 @@
 ;DEFINE INSTALLER INFORMATION
 Name "${PRODUCT_ID} ${PRODUCT_VER}"
 OutFile "output/${PRODUCT_ID}${PRODUCT_VER}_${CommitID}_OnlineInstaller.exe"
-BrandingText "${CommitID}/${CommitDate}"
+;BrandingText "Commit ${CommitID} / Date ${CommitDate}"
 Unicode "True"
 InstallDir "C:\Games\NotITG"
 RequestExecutionLevel user
@@ -27,15 +27,15 @@ ShowInstDetails show
 
 ;assest define stuff
 ;!define WAV_FILE "fish.wav" 
-!define MUI_HEADERIMAGE								
-!define MUI_HEADERIMAGE_BITMAP "assets\nitg_header.bmp" 
+;!define MUI_HEADERIMAGE								
+;!define MUI_HEADERIMAGE_BITMAP "assets\nitg_header.bmp" 
 !define WELCOME_FINISH_IMAGE "assets\wizard2.bmp"
 !define MUI_WELCOMEFINISHPAGE_BITMAP "${WELCOME_FINISH_IMAGE}"
-!define MUI_ICON "assets\nitg_install.ico"
+!define MUI_ICON "assets\nitg.ico"
 ;asset text stuff
 !define MUI_WELCOMEPAGE_TITLE "${PRODUCT_ID} ${PRODUCT_VER} - Online Installer"	
 !define MUI_WELCOMEPAGE_TEXT "This installation required internet connection to download Game Files, make sure your connection is stable$\r$\nClick 'Next' to continue$\r$\n$\r$\nThe NotITG Project is managed by TaroNuke and HeySora$\r$\n$\r$\nThis installer is not endorsed by NotITG Team"
-
+!define MUI_ABORTWARNING
 ;page stuff
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "assets\Licenses.txt"
@@ -50,6 +50,7 @@ ShowInstDetails show
 !delfile "${CommitIDParse}"
 !delfile "${CommitDateParse}"
 
+SectionGroup "Game"
 Section "Full Game" Game
 AddSize 634993
 SectionIn 1 RO
@@ -63,7 +64,7 @@ SetOutPath $INSTDIR
   IfFileExists "$0" existFile
   ;DetailPrint "Download Game"
   ;NScurl::http GET "https://cloud.noti.tg/QuickStart-${PRODUCT_VER}.zip" $0 /RESUME /END
-  inetc::get /caption "Download Game" "https://cloud.noti.tg/QuickStart-${PRODUCT_VER}.zip" "$0"
+  inetc::get /CAPTION "Download Game" "https://cloud.noti.tg/QuickStart-${PRODUCT_VER}.zip" "$0" /RESUME
   Pop $1
   DetailPrint "Download Game: $1"
   StrCmp $1 "OK" download_ok download_notok
@@ -102,6 +103,7 @@ SetOutPath $INSTDIR
   Sleep 1000
   Delete "$TEMP\${PRODUCT_ID}-${PRODUCT_VER}-Quickstart.zip"
   Sleep 2000
+  delete "$TEMP\${PRODUCT_ID}-${PRODUCT_VER}-Quickstart.zip"
   Abort
   
   extractfail:
@@ -114,31 +116,42 @@ SetOutPath $INSTDIR
   finish:
   
 SectionEnd
-  
-Section "Game Shortcut" ShortcutGame
+
+Section /o "Minimal Game" SongRemove
+SectionIn 1
+SetOutPath $INSTDIR
+AddSize -488180
+RMDir /r "$INSTDIR\Songs\Mod Jam Easy Modo"
+RMDir /r "$INSTDIR\Songs\Mods Boot Camp"
+RMDir /r "$INSTDIR\Songs\OISRT - Day 1"
+SectionEnd
+SectionGroupEnd
+
+SectionGroup "Shortcut"
+Section "Game" ShortcutGame
 Sleep 500
 DetailPrint "Creating Shortcut"
-CreateShortCut "$DESKTOP\${PRODUCT_ID} ${PRODUCT_VER} - Folder.lnk" "$INSTDIR\"
+CreateShortCut "$DESKTOP\${PRODUCT_ID} ${PRODUCT_VER}.lnk" "$INSTDIR\Program\NotITG-v4.9.1.exe"
 SectionEnd
 
-Section "Folder Shortcut" ShortcutFolder
+Section "Folder" ShortcutFolder
 Sleep 500
 DetailPrint "Creating Folder Shortcut"
 CreateShortCut "$DESKTOP\${PRODUCT_ID} ${PRODUCT_VER} - Folder.lnk" "$INSTDIR\"
 SectionEnd
+SectionGroupEnd
 
+SectionGroup "Additional"
 Section "Mirin Template v5.0.1" MirinTemplate
 SetOutPath $INSTDIR
-inetc::get /caption "Download Mirin Template" "https://github.com/XeroOl/mirin-template/releases/download/v5.0.1/mirin-template-5.0.1.zip" "$TEMP\mirin501.zip"
-CreateDirectory "$INSTDIR\Songs\MyModchart"
-nsisunz::UnzipToLog "$TEMP\mirin501.zip" "$INSTDIR\Songs\MyModchart\Mirin Template"
-delete "$TEMP\mirin501.zip"
+CreateDirectory "$INSTDIR\Songs\MyModchart\Mirin Template"
+SetOutPath "$INSTDIR\Songs\MyModchart\Mirin Template"
+File /r "assets\MirinTemplate\*"
 SectionEnd
 
 Section "Pack - Mod Jam Easy Modo 2" MJEZ2
 AddSize 213875
 SetOutPath $INSTDIR
-
 StrCpy $0 "$TEMP\Mod Jam Easy Modo 2.zip"
 inetc::get /caption "Download" "https://www.dropbox.com/scl/fi/9sp63j42n7ghc551h3d02/Mod-Jam-Easy-Modo-2.zip?rlkey=3g0k1191hu4l3rdbxfl3yo5v9&dl=1" "$0"
 Pop $1
@@ -146,15 +159,7 @@ DetailPrint "Download Pack: $1"
 nsisunz::UnzipToLog "$0" "$INSTDIR\Songs"
 delete "$TEMP\Mod Jam Easy Modo 2.zip"
 SectionEnd
-
-Section /o "Song Removal" SongRemove
-SetOutPath $INSTDIR
-AddSize -488180
-RMDir /r "$INSTDIR\Songs\Mod Jam Easy Modo"
-RMDir /r "$INSTDIR\Songs\Mods Boot Camp"
-RMDir /r "$INSTDIR\Songs\OISRT - Day 1"
-SectionEnd
-
+SectionGroupEnd
 
 
 ;section description
@@ -162,7 +167,7 @@ SectionEnd
 !insertmacro MUI_DESCRIPTION_TEXT ${Game} "Setup will download the game data from NotITG website and extract it"
 !insertmacro MUI_DESCRIPTION_TEXT ${SongRemove} "All the songpack will be remove to keep the game in minimal space. Unchecked this if you don't need to (Specially if you are beginner)"
 !insertmacro MUI_DESCRIPTION_TEXT ${MirinTemplate} "Template use for NotITG Modfile. This will install in Song directory"
-!insertmacro MUI_DESCRIPTION_TEXT ${MJEZ2} "Sequel of Mod Jam Easy Modo which targeted to beginner. This will install in Song directory"
+!insertmacro MUI_DESCRIPTION_TEXT ${MJEZ2} "Sequel of Mod Jam Easy Modo which targeted for beginner"
 !insertmacro MUI_DESCRIPTION_TEXT ${ShortcutGame} "Creating game shortcut"
 !insertmacro MUI_DESCRIPTION_TEXT ${ShortcutFolder} "Creating game folder shortcut"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
@@ -171,6 +176,10 @@ Function .onInit
 			;splash
 			InitPluginsDir
 			File /oname=$PLUGINSDIR\splash.bmp "assets\nitglogo.bmp"
-			advsplash::show 300 200 400 0x04025C $PLUGINSDIR\splash
+			newadvsplash::show 1000 800 800 0x04025C $PLUGINSDIR\splash.bmp 
 			Delete "$PLUGINSDIR\splash.bmp"
+FunctionEnd
+
+Function .onGuiEnd
+MessageBox MB_OK|MB_ICONINFORMATION "Installer built by: nhan2k0$\r$\nCommit ID and Date ${CommitID} / ${CommitDate}$\r$\nSrc/binary releases: https://github.com/nhan2k0/NotITGInstaller"
 FunctionEnd
